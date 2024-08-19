@@ -1,0 +1,103 @@
+---
+title: "poblacio 6 a 7"
+author: "ETN"
+date: "`r Sys.time()`"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    css: styles.css
+  pdf_document:
+    toc: yes
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r}
+library(tidyverse)
+library(data.table)
+library(readxl)
+
+summary_table_coles = read_excel('~/idiap/data/ododnt_girona/Escoles_Giona_3_mod.xlsx', sheet = 3)
+```
+
+# Results {.tabset}
+
+## Revisats
+
+```{r}
+t.test(revisats ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$revisats ~ summary_table_coles$Grup,
+        main = paste("Boxplot of total population by Group"),
+        xlab = "Group",
+        ylab = 'revisats')
+
+```
+
+## CAOD
+
+```{r}
+t.test(CAOD ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$CAOD ~ summary_table_coles$Grup,
+        main = paste("Boxplot of CAOD by Group"),
+        xlab = "Group",
+        ylab = 'CAOD')
+
+```
+
+## Índex
+
+```{r}
+t.test(index ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$index ~ summary_table_coles$Grup,
+        main = paste("Boxplot of index by Group"),
+        xlab = "Group",
+        ylab = 'index')
+
+```
+
+## COD
+
+```{r}
+t.test(cod ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$cod ~ summary_table_coles$Grup,
+        main = paste("Boxplot of COD by Group"),
+        xlab = "Group",
+        ylab = 'COD')
+
+```
+
+## Sans
+
+```{r}
+t.test(sans ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$sans ~ summary_table_coles$Grup,
+        main = paste("Boxplot of healthy by Group"),
+        xlab = "Group",
+        ylab = "sans")
+
+```

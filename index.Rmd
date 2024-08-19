@@ -1,0 +1,15 @@
+---
+title: "Ioduries"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+---
+
+* Descriptives població total[[html]](poblacio_gral.html)
+
+* població 4 a 5 anys[[html]](poblacio_4_5.html)
+
+* població 6 a 7 anys[[html]](poblacio_6_7.html)
+
+* població 11 a 12 anys[[html]](poblacio_11_12.html)

@@ -1,0 +1,125 @@
+---
+title: "poblacio general"
+author: "ETN"
+date: "`r Sys.time()`"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    css: styles.css
+  pdf_document:
+    toc: yes
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r}
+library(tidyverse)
+library(data.table)
+library(readxl)
+
+taula = read_excel('~/idiap/data/ododnt_girona/Escoles_Giona_3_mod.xlsx')
+```
+
+```{r}
+summary_table <- taula %>%
+  group_by(Grup) %>%
+  summarise(
+    total_sum = sum(total, na.rm = TRUE),
+    lliures_car_sum = sum(lliures_car, na.rm = TRUE),
+    med_caod_mean = mean(med_caod, na.rm = TRUE),
+    med_co_mean = mean(med_co, na.rm = TRUE),
+    perc_sans_mean = mean(`%sans`, na.rm = TRUE)
+  )
+
+summary_table_coles <- taula %>%
+  group_by(escola, Grup) %>%
+  summarise(
+    total_sum = sum(total, na.rm = TRUE),
+    lliures_car_sum = sum(lliures_car, na.rm = TRUE),
+    med_caod_mean = mean(med_caod, na.rm = TRUE),
+    med_co_mean = mean(med_co, na.rm = TRUE),
+    perc_sans_mean = mean(`%sans`, na.rm = TRUE)
+  )
+```
+
+# Results {.tabset}
+
+## Població total
+
+```{r}
+t.test(total_sum ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$total_sum ~ summary_table_coles$Grup,
+        main = paste("Boxplot of total population by Group"),
+        xlab = "Group",
+        ylab = 'Total població')
+
+```
+
+## Lliures caries
+
+```{r}
+t.test(lliures_car_sum ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$lliures_car_sum ~ summary_table_coles$Grup,
+        main = paste("Boxplot of caries by Group"),
+        xlab = "Group",
+        ylab = 'Lliures caries')
+
+```
+
+## CAOD
+
+```{r}
+t.test(med_caod_mean ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$med_caod_mean ~ summary_table_coles$Grup,
+        main = paste("Boxplot of CAOD by Group"),
+        xlab = "Group",
+        ylab = 'CAOD')
+
+```
+
+## CO
+
+```{r}
+t.test(med_co_mean ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$med_co_mean ~ summary_table_coles$Grup,
+        main = paste("Boxplot of CO by Group"),
+        xlab = "Group",
+        ylab = 'CO')
+
+```
+
+## Percentatge sans
+
+```{r}
+t.test(perc_sans_mean ~ Grup, data = summary_table_coles)
+```
+
+```{r}
+
+boxplot(summary_table_coles$perc_sans_mean ~ summary_table_coles$Grup,
+        main = paste("Boxplot of healthy percentage by Group"),
+        xlab = "Group",
+        ylab = "percentatge sans")
+
+```
