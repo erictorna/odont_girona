@@ -52,7 +52,10 @@ summary_table_coles <- taula %>%
 ## Població total
 
 ```{r}
-t.test(total_sum ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$total_sum)$p.value
+print('t.test')
+t.test(total_sum ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -67,7 +70,10 @@ boxplot(summary_table_coles$total_sum ~ summary_table_coles$Grup,
 ## Lliures caries
 
 ```{r}
-t.test(lliures_car_sum ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$lliures_car_sum)$p.value
+print('t.test')
+t.test(lliures_car_sum ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -82,7 +88,10 @@ boxplot(summary_table_coles$lliures_car_sum ~ summary_table_coles$Grup,
 ## CAOD
 
 ```{r}
-t.test(med_caod_mean ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$med_caod_mean)$p.value
+print('wilcox test')
+wilcox.test(med_caod_mean ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -97,7 +106,10 @@ boxplot(summary_table_coles$med_caod_mean ~ summary_table_coles$Grup,
 ## CO
 
 ```{r}
-t.test(med_co_mean ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$med_co_mean)$p.value
+print('wilcox test')
+wilcox.test(med_co_mean ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -112,7 +124,24 @@ boxplot(summary_table_coles$med_co_mean ~ summary_table_coles$Grup,
 ## Percentatge sans
 
 ```{r}
-t.test(perc_sans_mean ~ Grup, data = summary_table_coles)
+
+print('Test de normalitat')
+shapiro.test(taula$`%sans`)$p.value
+print('fisher test')
+
+setDT(taula)
+group_a_surpassed <- sum(taula[Grup=='A']$lliures_car)
+group_a_total <- sum(taula[Grup=='A']$total)
+group_b_surpassed <- sum(taula[Grup=='B']$lliures_car)
+group_b_total <- sum(taula[Grup=='B']$total)
+
+group_a_not_surpassed <- group_a_total - group_a_surpassed
+group_b_not_surpassed <- group_b_total - group_b_surpassed
+
+contingency_table <- matrix(c(group_a_surpassed, group_a_not_surpassed,
+                              group_b_surpassed, group_b_not_surpassed),
+                            nrow = 2, byrow = TRUE)
+fisher.test(contingency_table)$p.value
 ```
 
 ```{r}

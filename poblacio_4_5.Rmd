@@ -30,7 +30,10 @@ summary_table_coles = read_excel('~/idiap/data/ododnt_girona/Escoles_Giona_3_mod
 ## Revisats
 
 ```{r}
-t.test(revisats ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$revisats)$p.value
+print('t.test')
+t.test(revisats ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -45,7 +48,10 @@ boxplot(summary_table_coles$revisats ~ summary_table_coles$Grup,
 ## CAOD
 
 ```{r}
-t.test(CAOD ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$CAOD)$p.value
+print('wilcox test')
+wilcox.test(CAOD ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -60,7 +66,10 @@ boxplot(summary_table_coles$CAOD ~ summary_table_coles$Grup,
 ## Índex
 
 ```{r}
-t.test(index ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$index)$p.value
+print('t.test')
+t.test(index ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -75,7 +84,10 @@ boxplot(summary_table_coles$index ~ summary_table_coles$Grup,
 ## COD
 
 ```{r}
-t.test(cod ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$cod)$p.value
+print('wilcox test')
+wilcox.test(cod ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
@@ -90,12 +102,46 @@ boxplot(summary_table_coles$cod ~ summary_table_coles$Grup,
 ## Sans
 
 ```{r}
-t.test(sans ~ Grup, data = summary_table_coles)
+print('Test de normalitat')
+shapiro.test(summary_table_coles$sans)$p.value
+print('t.test')
+t.test(sans ~ Grup, data = summary_table_coles)$p.value
 ```
 
 ```{r}
 
 boxplot(summary_table_coles$sans ~ summary_table_coles$Grup,
+        main = paste("Boxplot of healthy by Group"),
+        xlab = "Group",
+        ylab = "sans")
+
+```
+
+## % Sans
+
+```{r}
+print('Test de normalitat')
+shapiro.test(summary_table_coles$`% sans`)$p.value
+print('fisher test')
+
+setDT(summary_table_coles)
+group_a_surpassed <- sum(summary_table_coles[Grup=='A']$sans)
+group_a_total <- sum(summary_table_coles[Grup=='A']$revisats)
+group_b_surpassed <- sum(summary_table_coles[Grup=='B']$sans)
+group_b_total <- sum(summary_table_coles[Grup=='B']$revisats)
+
+group_a_not_surpassed <- group_a_total - group_a_surpassed
+group_b_not_surpassed <- group_b_total - group_b_surpassed
+
+contingency_table <- matrix(c(group_a_surpassed, group_a_not_surpassed,
+                              group_b_surpassed, group_b_not_surpassed),
+                            nrow = 2, byrow = TRUE)
+fisher.test(contingency_table)$p.value
+```
+
+```{r}
+
+boxplot(summary_table_coles$`% sans` ~ summary_table_coles$Grup,
         main = paste("Boxplot of healthy by Group"),
         xlab = "Group",
         ylab = "sans")
